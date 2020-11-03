@@ -1,12 +1,13 @@
-﻿using System;
+﻿using AutoMapper;
+using ExchangeBureauxApi.Data.Models;
+using ExchangeBureauxApi.Service.Interfaces;
+using ExchangeBureauxApi.ViewModels;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Globalization;
 using System.Threading.Tasks;
-using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using ExchangeBureauxApi.Service.Interfaces;
-using ExchangeBureauxApi.Data.Models;
-using ExchangeBureauxApi.ViewModels;
-using Microsoft.Extensions.Logging;
+using ExchangeBureauxApi.Service.Enums;
 
 namespace ExchangeBureauxApi.Controllers
 {
@@ -37,41 +38,111 @@ namespace ExchangeBureauxApi.Controllers
 
         [HttpGet]
         [Route("getcurrency")]
-        public async Task<ActionResult> GetCurrency(string identifier)
+        public async Task<ActionResult<CurrencyExchange>> GetCurrency(string identifier)
         {
-
-            var currency = await _currencyService.GetCurrencyByIdentifierAsync(identifier);
-
-            if (currency == null)
+            try
             {
-                return NotFound();
-            }
+                var currency = await _currencyService.GetCurrencyByIdentifierAsync(identifier);
 
-            var date = currency.UpdatedDate ?? currency.CreatedDate;
-            var message = $"Actualiza el dia {date}";
+                var date = currency.UpdatedDate ?? currency.CreatedDate;
+                var message = $"Actualiza el dia {date}";
 
-            return Ok(new[]
-            {
+                _logger.LogTrace("Response succeeded");
+                return Ok(new[]
+                {
                     currency.ConversionValue.ToString(CultureInfo.InvariantCulture),
                     currency.InverseConversionValue.ToString(CultureInfo.InvariantCulture),
                     message
-            });
+                });
+
+            }
+            catch (NullReferenceException e)
+            {
+                _logger.LogError(e, "Please insert a value in the currency input 'Currency'");
+
+                //this could be done better, automatically when logError is called
+                await _logService.Save(new Log()
+                {
+                    Aplication = "ExchangeBureauxApi",
+                    Message = "Please insert a value in the currency input 'Currency'",
+                    CreatedDate = DateTime.Now,
+                    Exception = typeof(NullReferenceException).FullName,
+                    Level = (int) LogTypes.Error,
+                    CreatedBy = (int) UserEnum.CurrentUser
+                }
+                );
+                return NotFound("Please insert a value in the currency input 'Currency'");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Critical Error Ocurred in {typeof(CurrencyController)}", this);
+                await _logService.Save(new Log()
+                {
+                    Aplication = "ExchangeBureauxApi",
+                    Message = $"Critical Error Ocurred in {typeof(CurrencyController)}",
+                    CreatedDate = DateTime.Now,
+                    Exception = typeof(Exception).FullName,
+                    Level = 5, //Critical
+                    CreatedBy = 1 //Current User
+                }
+                );
+
+                return Problem("Critical Issue Ocurred While your request was handled");
+            }
         }
 
         [HttpPost]
         [Route("maketransaction")]
-        public async Task<ActionResult> PostMakeTransaction([FromBody]TransactionVm transactionVm)
+        public async Task<ActionResult> PostMakeTransaction([FromBody] TransactionVm transactionVm)
         {
             //var transaction = _mapper.Map<Transaction>(transactionVm);
-            var transaction = new Transaction()
+            try
             {
-                AmountConverted = transactionVm.AmountToConvert,
-                UserId = transactionVm.UserId
-            };
+                var transaction = new Transaction()
+                {
+                    AmountToConvert = transactionVm.AmountToConvert,
+                    UserId = transactionVm.UserId
+                };
 
-            await _transactionService.Save(transaction, transactionVm.CurrencyIdentifier);
+                await _transactionService.Save(transaction, transactionVm.CurrencyIdentifier);
 
-            return Ok();
+                return Ok(new
+                {
+                    message = "Transaction Succed"
+                });
+            }
+            catch (ApplicationException applicationException)
+            {
+                await _logService.Save(new Log()
+                {
+                    Aplication = "ExchangeBureauxApi",
+                    Message = applicationException.Message,
+                    CreatedDate = DateTime.Now,
+                    Exception = typeof(ApplicationException).FullName,
+                    Level = (int) LogTypes.Error,
+                    CreatedBy = (int) UserEnum.CurrentUser
+                }
+                );
+                _logger.LogError(applicationException, applicationException.Message);
+                return NotFound();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Critical Error Ocurred in {typeof(CurrencyController)}", this);
+                await _logService.Save(new Log()
+                {
+                    Aplication = "ExchangeBureauxApi",
+                    Message = $"Critical Error Ocurred in {typeof(CurrencyController)}",
+                    CreatedDate = DateTime.Now,
+                    Exception = typeof(Exception).FullName,
+                    Level = (int) LogTypes.Critical, //Critical
+                    CreatedBy = (int)UserEnum.CurrentUser //Current User
+                }
+                );
+
+                return Problem("Critical Issue Ocurred While your request was handled");
+
+            }
         }
     }
 }

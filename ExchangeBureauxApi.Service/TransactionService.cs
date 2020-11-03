@@ -25,13 +25,13 @@ namespace ExchangeBureauxApi.Service
 
             var result = _uow.CurrencyExchanges.Get(exchange =>
                 exchange.CurrencyTo.Identifier == transactionVmCurrencyIdentifier &&
-                exchange.CurrencyFromId == (int)CurrencyIds.Argentina);
+                exchange.CurrencyFromId == (int)CurrencyIds.Argentina, exchange => exchange.CurrencyFrom, exchange => exchange.CurrencyTo);
 
-            var crrncyConverted = transaction.AmountToConvert / result.ConversionValue;
+            var crrncyConverted = Math.Round(transaction.AmountToConvert / result.ConversionValue, 2);
 
             var limitPermited = _uow.LimitPucharses.Get(pucharse => 
                 pucharse.CurrencyId == result.CurrencyToId &&
-                pucharse.UserId == 1 //CurrentUser
+                pucharse.UserId == (int) UserEnum.CurrentUser
                 );
 
             if (limitPermited == null)
@@ -47,6 +47,13 @@ namespace ExchangeBureauxApi.Service
             limitPermited.MaxAmountToBuy -= crrncyConverted;
 
             _uow.LimitPucharses.Update(limitPermited);
+
+            transaction.AmountConverted = crrncyConverted;
+            transaction.CurrencyFromId = result.CurrencyFromId;
+            transaction.CurrencyToId = result.CurrencyToId;
+            transaction.CreatedDate = DateTime.Now;
+            transaction.CreatedBy = transaction.UserId;
+            transaction.Description = $"Transaction from {result.CurrencyFrom.Identifier} to {result.CurrencyTo.Identifier}";
 
             _uow.Transactions.AddAsync(transaction);
 
