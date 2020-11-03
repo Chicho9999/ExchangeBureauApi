@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ExchangeBureauxApi.Service.Interfaces;
 using ExchangeBureauxApi.Data.Models;
@@ -17,18 +18,21 @@ namespace ExchangeBureauxApi.Controllers
         private readonly ILogger _logger;
         private readonly ILogService _logService;
         private readonly ITransactionService _transactionService;
+        private readonly IMapper _mapper;
 
         public CurrencyController(
             ICurrencyService currencyService, 
             ILogger logger, 
             ILogService logService,
-            ITransactionService transactionService
+            ITransactionService transactionService,
+            IMapper mapper
             )
         {
             _currencyService = currencyService;
             _logger = logger;
             _logService = logService;
             _transactionService = transactionService;
+            _mapper = mapper;
         }
 
         // GET: api/CurrencyExchanges
@@ -88,9 +92,11 @@ namespace ExchangeBureauxApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<CurrencyExchange>> MakeLog([FromBody] TransactionVm transaction)
+        public async Task<ActionResult<CurrencyExchange>> MakeTransaction([FromBody] TransactionVm transactionVm)
         {
-            _transactionService.Save(transaction);
+            var transaction1 = _mapper.Map<Transaction>(transactionVm);
+
+            await _transactionService.Save(transaction1);
 
             return Ok();
         }
