@@ -5,6 +5,6 @@ namespace ExchangeBureauxApi.Service.Interfaces
 {
     public interface ITransactionService
     {
-        Task Save(Log log);
+        Task Save(Transaction log);
     }
 }

@@ -14,9 +14,9 @@ namespace ExchangeBureauxApi.Service
             _uow = uow;
         }
 
-        public Task Save(Log log)
+        public Task Save(Transaction transaction)
         {
-            return _uow.Logs.AddAsync(log);
+            return _uow.Transactions.AddAsync(transaction);
         }
     }
 }

@@ -16,12 +16,19 @@ namespace ExchangeBureauxApi.Controllers
         private readonly ICurrencyService _currencyService;
         private readonly ILogger _logger;
         private readonly ILogService _logService;
+        private readonly ITransactionService _transactionService;
 
-        public CurrencyController(ICurrencyService currencyService, ILogger logger, ILogService logService)
+        public CurrencyController(
+            ICurrencyService currencyService, 
+            ILogger logger, 
+            ILogService logService,
+            ITransactionService transactionService
+            )
         {
             _currencyService = currencyService;
             _logger = logger;
             _logService = logService;
+            _transactionService = transactionService;
         }
 
         // GET: api/CurrencyExchanges
@@ -81,9 +88,9 @@ namespace ExchangeBureauxApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<CurrencyExchange>> MakeLog([FromBody] LogVm transaction)
+        public async Task<ActionResult<CurrencyExchange>> MakeLog([FromBody] TransactionVm transaction)
         {
-
+            _transactionService.Save(transaction);
 
             return Ok();
         }
