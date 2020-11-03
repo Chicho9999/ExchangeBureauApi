@@ -15,6 +15,7 @@ namespace ExchangeBureauxApi.Data.Models
         public DbSet<CurrencyExchange> CurrencyExchanges { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Log> Logs { get; set; }
+        public DbSet<LimitPucharse> LimitPucharses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -61,6 +62,8 @@ namespace ExchangeBureauxApi.Data.Models
             var hashedPassword = passwordHasher.HashPassword(user, "admin123.");
             user.Password = hashedPassword;
 
+            modelBuilder.Entity<User>().HasData(user);
+
             modelBuilder.Entity<Currency>().HasData(
                 new Currency
                 {
@@ -87,6 +90,24 @@ namespace ExchangeBureauxApi.Data.Models
                     CreatedDate = DateTime.Now
                 }
             );
+
+            modelBuilder.Entity<LimitPucharse>().HasData(
+                new LimitPucharse
+                {
+                    CurrencyId = 1,
+                    MaxAmountToBuy = 200,
+                    UserId = 1,
+                    CreatedBy = 1,
+                    CreatedDate = DateTime.Now
+                },
+                new LimitPucharse
+                {
+                    CurrencyId = 2,
+                    MaxAmountToBuy = 300,
+                    UserId = 1,
+                    CreatedBy = 1,
+                    CreatedDate = DateTime.Now
+                });
 
             modelBuilder.Entity<CurrencyExchange>().HasData(
                 new CurrencyExchange
@@ -130,8 +151,6 @@ namespace ExchangeBureauxApi.Data.Models
                     CreatedDate = DateTime.Now
                 }
             );
-
-            modelBuilder.Entity<User>().HasData(user);
         }
     }
 }

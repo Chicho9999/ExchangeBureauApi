@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ExchangeBureauxApi.Data.Models
 {
@@ -30,5 +31,9 @@ namespace ExchangeBureauxApi.Data.Models
         [MaxLength(250)]
         [Required]
         public string Address { get; set; }
+
+        public virtual ICollection<Account> Accounts { get; set; }
+
+        public virtual ICollection<Transaction> Transactions { get; set; }
     }
 }
