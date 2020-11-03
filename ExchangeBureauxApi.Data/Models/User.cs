@@ -32,7 +32,7 @@ namespace ExchangeBureauxApi.Data.Models
         [Required]
         public string Address { get; set; }
 
-        public virtual ICollection<Account> Accounts { get; set; }
+        public virtual ICollection<LimitPucharse> LimitPucharses { get; set; }
 
         public virtual ICollection<Transaction> Transactions { get; set; }
     }

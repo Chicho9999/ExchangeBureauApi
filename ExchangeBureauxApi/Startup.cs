@@ -28,7 +28,7 @@ namespace ExchangeBureauxApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddAutoMapper(typeof(Startup));
+            services.AddAutoMapper(typeof(AutoMapping));
             services.AddDbContext<CurrencyExchangeDbContext>(
                 optios => optios.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
                 connection => connection.MigrationsAssembly("ExchangeBureauxApi.Data")));

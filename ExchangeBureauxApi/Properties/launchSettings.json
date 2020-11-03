@@ -12,7 +12,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "api/currency?identifier=USD",
+      "launchUrl": "api/currency/getcurrency?identifier=USD",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -20,7 +20,7 @@
     "ExchangeBureauxApi": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "api/currency?identifier=USD",
+      "launchUrl": "api/currency/getcurrency?identifier=USD",
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

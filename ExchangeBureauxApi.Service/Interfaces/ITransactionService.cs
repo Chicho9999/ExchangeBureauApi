@@ -5,6 +5,6 @@ namespace ExchangeBureauxApi.Service.Interfaces
 {
     public interface ITransactionService
     {
-        Task Save(Transaction transaction);
+        Task Save(Transaction transaction, string transactionVmCurrencyIdentifier);
     }
 }

@@ -4,6 +4,7 @@ using ExchangeBureauxApi.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ExchangeBureauxApi.Data.Migrations
 {
@@ -56,7 +57,7 @@ namespace ExchangeBureauxApi.Data.Migrations
                         {
                             CurrencyId = 1,
                             CreatedBy = 1,
-                            CreatedDate = new DateTime(2020, 11, 2, 4, 12, 18, 50, DateTimeKind.Local).AddTicks(7153),
+                            CreatedDate = new DateTime(2020, 11, 3, 1, 58, 22, 380, DateTimeKind.Local).AddTicks(4278),
                             Identifier = "USD",
                             Name = "DOLAR"
                         },
@@ -64,7 +65,7 @@ namespace ExchangeBureauxApi.Data.Migrations
                         {
                             CurrencyId = 2,
                             CreatedBy = 1,
-                            CreatedDate = new DateTime(2020, 11, 2, 4, 12, 18, 50, DateTimeKind.Local).AddTicks(7277),
+                            CreatedDate = new DateTime(2020, 11, 3, 1, 58, 22, 380, DateTimeKind.Local).AddTicks(4356),
                             Identifier = "BRL",
                             Name = "REAL"
                         },
@@ -72,7 +73,7 @@ namespace ExchangeBureauxApi.Data.Migrations
                         {
                             CurrencyId = 3,
                             CreatedBy = 1,
-                            CreatedDate = new DateTime(2020, 11, 2, 4, 12, 18, 50, DateTimeKind.Local).AddTicks(7280),
+                            CreatedDate = new DateTime(2020, 11, 3, 1, 58, 22, 380, DateTimeKind.Local).AddTicks(4359),
                             Identifier = "ARS",
                             Name = "PESO ARGENTINO"
                         });
@@ -123,7 +124,7 @@ namespace ExchangeBureauxApi.Data.Migrations
                             CurrencyExchangeId = 1,
                             ConversionValue = 83.859999999999999,
                             CreatedBy = 1,
-                            CreatedDate = new DateTime(2020, 11, 2, 4, 12, 18, 51, DateTimeKind.Local).AddTicks(7848),
+                            CreatedDate = new DateTime(2020, 11, 3, 1, 58, 22, 380, DateTimeKind.Local).AddTicks(8233),
                             CurrencyFromId = 3,
                             CurrencyToId = 1,
                             InverseConversionValue = 77.469999999999999
@@ -133,7 +134,7 @@ namespace ExchangeBureauxApi.Data.Migrations
                             CurrencyExchangeId = 2,
                             ConversionValue = 77.469999999999999,
                             CreatedBy = 1,
-                            CreatedDate = new DateTime(2020, 11, 2, 4, 12, 18, 51, DateTimeKind.Local).AddTicks(7907),
+                            CreatedDate = new DateTime(2020, 11, 3, 1, 58, 22, 380, DateTimeKind.Local).AddTicks(8285),
                             CurrencyFromId = 1,
                             CurrencyToId = 3,
                             InverseConversionValue = 83.859999999999999
@@ -143,7 +144,7 @@ namespace ExchangeBureauxApi.Data.Migrations
                             CurrencyExchangeId = 3,
                             ConversionValue = 14.039999999999999,
                             CreatedBy = 1,
-                            CreatedDate = new DateTime(2020, 11, 2, 4, 12, 18, 51, DateTimeKind.Local).AddTicks(7941),
+                            CreatedDate = new DateTime(2020, 11, 3, 1, 58, 22, 380, DateTimeKind.Local).AddTicks(8287),
                             CurrencyFromId = 3,
                             CurrencyToId = 2,
                             InverseConversionValue = 12.529999999999999
@@ -153,11 +154,160 @@ namespace ExchangeBureauxApi.Data.Migrations
                             CurrencyExchangeId = 4,
                             ConversionValue = 12.529999999999999,
                             CreatedBy = 1,
-                            CreatedDate = new DateTime(2020, 11, 2, 4, 12, 18, 51, DateTimeKind.Local).AddTicks(7942),
+                            CreatedDate = new DateTime(2020, 11, 3, 1, 58, 22, 380, DateTimeKind.Local).AddTicks(8289),
                             CurrencyFromId = 2,
                             CurrencyToId = 3,
                             InverseConversionValue = 14.039999999999999
                         });
+                });
+
+            modelBuilder.Entity("ExchangeBureauxApi.Data.Models.LimitPucharse", b =>
+                {
+                    b.Property<int>("LimitPucharseId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CurrencyId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("MaxAmountToBuy")
+                        .HasColumnType("float");
+
+                    b.Property<int?>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("LimitPucharseId");
+
+                    b.HasIndex("CurrencyId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("LimitPucharses");
+
+                    b.HasData(
+                        new
+                        {
+                            LimitPucharseId = 1,
+                            CreatedBy = 1,
+                            CreatedDate = new DateTime(2020, 11, 3, 1, 58, 22, 380, DateTimeKind.Local).AddTicks(6212),
+                            CurrencyId = 1,
+                            MaxAmountToBuy = 200.0,
+                            UserId = 1
+                        },
+                        new
+                        {
+                            LimitPucharseId = 2,
+                            CreatedBy = 1,
+                            CreatedDate = new DateTime(2020, 11, 3, 1, 58, 22, 380, DateTimeKind.Local).AddTicks(6267),
+                            CurrencyId = 2,
+                            MaxAmountToBuy = 300.0,
+                            UserId = 1
+                        });
+                });
+
+            modelBuilder.Entity("ExchangeBureauxApi.Data.Models.Log", b =>
+                {
+                    b.Property<int>("LogId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Aplication")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Exception")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<int>("Level")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
+
+                    b.Property<int?>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("LogId");
+
+                    b.ToTable("Logs");
+                });
+
+            modelBuilder.Entity("ExchangeBureauxApi.Data.Models.Transaction", b =>
+                {
+                    b.Property<int>("TransactionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<double>("AmountConverted")
+                        .HasColumnType("float");
+
+                    b.Property<double>("AmountToConvert")
+                        .HasColumnType("float");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CurrencyFromId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CurrencyToId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
+
+                    b.Property<int?>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TransactionId");
+
+                    b.HasIndex("CurrencyFromId");
+
+                    b.HasIndex("CurrencyToId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("ExchangeBureauxApi.Data.Models.User", b =>
@@ -219,11 +369,11 @@ namespace ExchangeBureauxApi.Data.Migrations
                             UserId = 1,
                             Address = "Rivadavia",
                             CreatedBy = 1,
-                            CreatedDate = new DateTime(2020, 11, 2, 4, 12, 18, 38, DateTimeKind.Local).AddTicks(5070),
+                            CreatedDate = new DateTime(2020, 11, 3, 1, 58, 22, 365, DateTimeKind.Local).AddTicks(4749),
                             Email = "lisandrochichi@gmail.com",
                             FirstName = "Lisandro",
                             LastName = "Chichi",
-                            Password = "AQAAAAEAACcQAAAAEMeKl8RaiTOOjSJc1l7aQRGGHSs/w7HfS0gDEN6CWpGsDVVEQGpiO+0ldE3oGxTMYw==",
+                            Password = "AQAAAAEAACcQAAAAENifjnZD+fdhUcYfdbVZLDO4naFlki2bfYG7dGZvNwSmZPCWvoaEEb4tVMhAeCxgog==",
                             Username = "LisandroAdmin"
                         });
                 });
@@ -240,6 +390,42 @@ namespace ExchangeBureauxApi.Data.Migrations
                         .WithMany("ToCurrencyExchanges")
                         .HasForeignKey("CurrencyToId")
                         .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ExchangeBureauxApi.Data.Models.LimitPucharse", b =>
+                {
+                    b.HasOne("ExchangeBureauxApi.Data.Models.Currency", "Currency")
+                        .WithMany()
+                        .HasForeignKey("CurrencyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ExchangeBureauxApi.Data.Models.User", "User")
+                        .WithMany("LimitPucharses")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ExchangeBureauxApi.Data.Models.Transaction", b =>
+                {
+                    b.HasOne("ExchangeBureauxApi.Data.Models.Currency", "CurrencyFrom")
+                        .WithMany("FromTransactions")
+                        .HasForeignKey("CurrencyFromId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("ExchangeBureauxApi.Data.Models.Currency", "CurrencyTo")
+                        .WithMany("ToTransactions")
+                        .HasForeignKey("CurrencyToId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("ExchangeBureauxApi.Data.Models.User", "User")
+                        .WithMany("Transactions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

@@ -94,6 +94,7 @@ namespace ExchangeBureauxApi.Data.Models
             modelBuilder.Entity<LimitPucharse>().HasData(
                 new LimitPucharse
                 {
+                    LimitPucharseId = 1,
                     CurrencyId = 1,
                     MaxAmountToBuy = 200,
                     UserId = 1,
@@ -102,6 +103,7 @@ namespace ExchangeBureauxApi.Data.Models
                 },
                 new LimitPucharse
                 {
+                    LimitPucharseId = 2,
                     CurrencyId = 2,
                     MaxAmountToBuy = 300,
                     UserId = 1,

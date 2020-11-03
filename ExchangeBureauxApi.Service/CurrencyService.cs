@@ -17,9 +17,11 @@ namespace ExchangeBureauxApi.Service
 
         public Task<CurrencyExchange> GetCurrencyByIdentifierAsync(string identifier)
         {
-            return _uow.CurrencyExchanges.GetAsync(exchange => 
+            var result = _uow.CurrencyExchanges.GetAsync(exchange => 
                 exchange.CurrencyTo.Identifier == identifier && 
                 exchange.CurrencyFromId == (int) CurrencyIds.Argentina);
+
+            return result;
         }
     }
 }

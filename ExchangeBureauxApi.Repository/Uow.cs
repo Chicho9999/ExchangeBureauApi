@@ -13,6 +13,7 @@ namespace ExchangeBureauxApi.Repository
         private IRepository<User> _Users;
         public IRepository<Log> Logs { get; }
         public IRepository<Transaction> Transactions { get; }
+        public IRepository<LimitPucharse> LimitPucharses { get; }
 
 
         public IRepository<Currency> Currencies => _Currencies ??= new GenericRepository<Currency>(_DBContext);

@@ -2,7 +2,7 @@
 {
     public enum CurrencyIds
     {
-        UnitedStates,
+        UnitedStates = 1,
         Brasil,
         Argentina
 

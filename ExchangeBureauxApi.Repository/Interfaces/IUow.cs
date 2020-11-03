@@ -11,6 +11,7 @@ namespace ExchangeBureauxApi.Repository.Interfaces
         IRepository<User> Users { get; }
         IRepository<Log> Logs { get; }
         IRepository<Transaction> Transactions { get; }
+        IRepository<LimitPucharse> LimitPucharses { get; }
 
         void Commit();
         Task CommitAsync();

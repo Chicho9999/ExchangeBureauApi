@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using ExchangeBureauxApi.Data.Models;
+using ExchangeBureauxApi.ViewModels;
 
 namespace ExchangeBureauxApi
 {
@@ -6,6 +8,8 @@ namespace ExchangeBureauxApi
     {
         public AutoMapping()
         {
+            CreateMap<Transaction, TransactionVm>();
+            CreateMap<TransactionVm, TransactionVm>();
         }
     }
 }

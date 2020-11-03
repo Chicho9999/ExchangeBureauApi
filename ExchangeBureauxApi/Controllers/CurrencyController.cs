@@ -21,8 +21,8 @@ namespace ExchangeBureauxApi.Controllers
         private readonly IMapper _mapper;
 
         public CurrencyController(
-            ICurrencyService currencyService, 
-            ILogger logger, 
+            ICurrencyService currencyService,
+            ILogger logger,
             ILogService logService,
             ITransactionService transactionService,
             IMapper mapper
@@ -35,68 +35,41 @@ namespace ExchangeBureauxApi.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/CurrencyExchanges
         [HttpGet]
-        public async Task<ActionResult<CurrencyExchange>> GetCurrency(string identifier)
+        [Route("getcurrency")]
+        public async Task<ActionResult> GetCurrency(string identifier)
         {
-            try
-            {
-                var currency = await _currencyService.GetCurrencyByIdentifierAsync(identifier);
 
-                var date = currency.UpdatedDate ?? currency.CreatedDate;
-                var message = $"Actualiza el dia {date}";
-                
-                return Ok(new[]
-                {
+            var currency = await _currencyService.GetCurrencyByIdentifierAsync(identifier);
+
+            if (currency == null)
+            {
+                return NotFound();
+            }
+
+            var date = currency.UpdatedDate ?? currency.CreatedDate;
+            var message = $"Actualiza el dia {date}";
+
+            return Ok(new[]
+            {
                     currency.ConversionValue.ToString(CultureInfo.InvariantCulture),
                     currency.InverseConversionValue.ToString(CultureInfo.InvariantCulture),
                     message
-                });
-
-            }
-            catch (NullReferenceException e)
-            {
-                Console.WriteLine(e);
-                _logger.LogError(e, "Please insert a value in the currency input 'Currency'");
-
-                //this could be done better, automatically when logError is called
-                await _logService.Save(new Log()
-                    {
-                        Aplication = "ExchangeBureauxApi",
-                        Message = "Please insert a value in the currency input 'Currency'",
-                        CreatedDate = DateTime.Now,
-                        Exception = typeof(NullReferenceException).FullName,
-                        Level = 3, //Error
-                        CreatedBy = 1 //Current User
-                    }
-                );
-                return NotFound("Please insert a value in the currency input 'Currency'");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                _logger.LogError(e, $"Critical Error Ocurred in {typeof(CurrencyController)}", this);
-                await _logService.Save(new Log()
-                    {
-                        Aplication = "ExchangeBureauxApi",
-                        Message = $"Critical Error Ocurred in {typeof(CurrencyController)}",
-                        CreatedDate = DateTime.Now,
-                        Exception = typeof(Exception).FullName,
-                        Level = 5, //Critical
-                        CreatedBy = 1 //Current User
-                    }
-                );
-
-                return Problem("Critical Issue Ocurred While your request was handled");
-            }
+            });
         }
 
-        [HttpGet]
-        public async Task<ActionResult<CurrencyExchange>> MakeTransaction([FromBody] TransactionVm transactionVm)
+        [HttpPost]
+        [Route("maketransaction")]
+        public async Task<ActionResult> PostMakeTransaction([FromBody]TransactionVm transactionVm)
         {
-            var transaction1 = _mapper.Map<Transaction>(transactionVm);
+            //var transaction = _mapper.Map<Transaction>(transactionVm);
+            var transaction = new Transaction()
+            {
+                AmountConverted = transactionVm.AmountToConvert,
+                UserId = transactionVm.UserId
+            };
 
-            await _transactionService.Save(transaction1);
+            await _transactionService.Save(transaction, transactionVm.CurrencyIdentifier);
 
             return Ok();
         }
